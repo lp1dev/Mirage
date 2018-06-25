@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "moduleResolution": "node",
+        "outDir": "dist/",
+        "rootDir": "src",
+        "removeComments": true,
+        "sourceMap": false,
+        "module": "umd"
+  }
+}
