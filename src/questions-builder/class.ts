@@ -1,16 +1,14 @@
-import TextLoader from "../text-loader/class";
+// import TextLoader from "../text-loader/class";
 import { Question } from "./interfaces";
 
 class QuestionsBuilder {
   private cache: Array<Question>;
 
-  constructor(private textLoader: TextLoader) {
-    console.log('Constructor ::', textLoader);
+  constructor(private textLoader: any) {
     this.cache = [];
   }
 
   build(question: Question) {
-    console.log('TextLoader ::', this.textLoader);
     if (this.cache[question.text] !== undefined) {
       return this.cache[question.text];
     }

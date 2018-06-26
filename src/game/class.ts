@@ -28,7 +28,6 @@ export class Game {
     }
 
     get questions() {
-        console.log('Get questions ::', this.gameData)
         return this.gameData.questions;
     }
 

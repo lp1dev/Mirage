@@ -1,6 +1,4 @@
-import TextLoader from "../text-loader/class";
-import mockText from '../text-loader/mock';
+import textData from '../text-loader/mock';
+import TextLoader from '../text-loader/class';
 
-const mockLoader = new TextLoader({});
-
-export { mockLoader }
+export default new TextLoader(textData);

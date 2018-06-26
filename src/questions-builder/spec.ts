@@ -1,4 +1,4 @@
-import { mockLoader } from './mock';
+import mockLoader from './mock';
 import QuestionsBuilder from './class';
 
 describe('Questions Builder', () => {
@@ -8,7 +8,7 @@ describe('Questions Builder', () => {
   });
   //
   it('should build questions', () => {
-    const builder = new QuestionsBuilder(mockLoader);    
+    const builder = new QuestionsBuilder(mockLoader);
     const question = builder.build({
       text: 'GAME_INTRO',
       answers: [{

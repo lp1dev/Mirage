@@ -6,6 +6,6 @@
         "rootDir": "src",
         "removeComments": true,
         "sourceMap": false,
-        "module": "umd"
+        "module": "CommonJS"
   }
 }

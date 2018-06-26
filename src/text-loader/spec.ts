@@ -1,4 +1,4 @@
-import TextLoader from './class';
+import { TextLoader } from './class';
 import mockData from './mock';
 
 describe('TextLoader', () => {

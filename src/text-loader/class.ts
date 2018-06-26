@@ -3,7 +3,6 @@ class TextLoader {
   }
 
   get(id: string) {
-    console.log(id);
     return this.textData[id][this.locale];
   }
 
