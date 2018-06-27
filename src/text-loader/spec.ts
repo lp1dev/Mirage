@@ -1,21 +1,21 @@
 import TextLoader from './class';
-import mockData from './mock';
+import { textData } from '../mock/texts';
 
 describe('TextLoader', () => {
   //
   it('should allow us to load text data', () => {
-    const loader = new TextLoader(mockData, 'EN_en');
+    const loader = new TextLoader(textData, 'EN_en');
   });
   //
   it('should allow us to get a specific text', () => {
-    const loader = new TextLoader(mockData, 'EN_en');    
-    expect(loader.get('GAME_INTRO')).toBe(mockData['GAME_INTRO']['EN_en']);
+    const loader = new TextLoader(textData, 'EN_en');    
+    expect(loader.get('GAME_INTRO')).toBe(textData['GAME_INTRO']['EN_en']);
   });
   //
   it('should allow us to change the locale used', () => {
-    const loader = new TextLoader(mockData, 'FR_fr');    
-    expect(loader.get('GAME_INTRO')).toBe(mockData['GAME_INTRO']['FR_fr']);
+    const loader = new TextLoader(textData, 'FR_fr');    
+    expect(loader.get('GAME_INTRO')).toBe(textData['GAME_INTRO']['FR_fr']);
     loader.setLocale('EN_en');
-    expect(loader.get('GAME_INTRO')).toBe(mockData['GAME_INTRO']['EN_en']);
+    expect(loader.get('GAME_INTRO')).toBe(textData['GAME_INTRO']['EN_en']);
   })
 });

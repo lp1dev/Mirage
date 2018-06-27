@@ -1,7 +1,52 @@
-class Exception { };
+class Exception {
+  private params: Array<any>;
+  type = 'Exception';
 
-class InvalidDataFormatException extends Exception { };
+  constructor(...params) {
+    this.params = params;
+  }
+  
+  toString() {
+    return `${this.type} :: ${this.params}`;
+  }
+};
 
-class InvalidQuestionIdException extends Exception { };
+class InvalidDataFormatException extends Exception { 
+  type = 'InvalidDataFormatException';
+};
 
-export { InvalidDataFormatException, InvalidQuestionIdException };
+class InvalidQuestionIdException extends Exception { 
+  type = 'InvalidQuestionIdException';
+
+};
+
+class InvalidTextIdException extends Exception { 
+  type = 'InvalidTextIdException';
+};
+
+class InvalidLocaleSpecifiedException extends Exception { 
+  type = 'InvalidLocaleSpecifiedException';
+};
+
+class InvalidStateException extends Exception { 
+  type = 'InvalidStateException';
+};
+
+class InvalidInstructionFormatException extends Exception { 
+  type = 'InvalidInstructionFormat';
+};
+
+class InvalidInstructionTypeException extends Exception { 
+  type = 'InvalidInstructionTypeException';
+};
+
+
+export { 
+  InvalidDataFormatException, 
+  InvalidQuestionIdException,
+  InvalidTextIdException,
+  InvalidLocaleSpecifiedException,
+  InvalidStateException,
+  InvalidInstructionFormatException,
+  InvalidInstructionTypeException
+};

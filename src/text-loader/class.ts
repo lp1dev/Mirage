@@ -1,9 +1,17 @@
+import { InvalidTextIdException, InvalidLocaleSpecifiedException } from "../game/exceptions";
+
 class TextLoader {
-  constructor(private textData: any, private locale?: string) {
+  constructor(private textData: any, private locale: string) {
   }
 
   get(id: string) {
-    return this.textData[id][this.locale];
+    if (!this.textData[id]) {
+      throw new InvalidTextIdException(id);
+    } else if (!this.textData[id][this.locale]){
+      throw new InvalidLocaleSpecifiedException(this.locale);
+    } else {
+      return this.textData[id][this.locale];
+    }
   }
 
   setLocale(locale: string) {

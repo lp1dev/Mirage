@@ -14,13 +14,10 @@ class QuestionsBuilder {
     }
     const builtQuestion: Question = {
       text: this.textLoader.get(question.text),
-      answers: question.answers.map(answer => {
-        const key = Object.keys(answer)[0];
-        const text = this.textLoader.get(key);
-        const obj : any = {};
-        obj[text] = obj[key];
-        return obj;
-      })
+      answers: {}
+    }
+    for (let key in question.answers) {
+      builtQuestion.answers[this.textLoader.get(key)] = question.answers[key];
     }
     this.cache[question.text] = builtQuestion;
     return builtQuestion;

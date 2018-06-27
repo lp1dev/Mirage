@@ -1,6 +1,6 @@
 import { Game } from './game/class';
-import gameData from './game/mock';
+import gameData from './mock/game';
 
-const g = new Game(gameData);
+// const g = new Game(gameData);
 
-console.log('index::', g);
+console.log('index::');
