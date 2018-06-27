@@ -64,7 +64,7 @@ describe('State Machine', () => {
     StateMachine.process('SET CHAPTER1 TRUE', state);
     StateMachine.process('IF TEST IS 42 AND CHAPTER1 == TRUE THEN GOTO CHAPTER_1', state);
     expect(state['question']).toBe('CHAPTER_1');
-  })
+  });
   //
   it('Should handle IF ELSE statements with multiple AND and OR conditionals', () => {
     const state = {
@@ -74,5 +74,39 @@ describe('State Machine', () => {
     };
     StateMachine.process('IF TEST IS 42 AND GAME_INTRO IS TRUE OR CHAPTER1 IS TRUE THEN GOTO PASSED', state);
     expect(state['question']).toBe('PASSED');
-  })
+  });
+  //
+  it('Should handle IF ELSE IF statements', () => {
+    const state = {
+      'TEST': 42,
+      'GAME_INTRO': 'FALSE',
+      'CHAPTER1': 'TRUE'
+    };
+    StateMachine.process('IF TEST IS 0 THEN SET DONE 0 ELSE IF GAME_INTRO IS FALSE THEN GOTO PASSED', state);
+    expect(state['question']).toBe('PASSED');
+  });
+  //
+  it('Should add numbers with ADD', () => {
+    const state = {
+      'A': 42,
+      'B': 2,
+      'C': 21
+    };
+    StateMachine.process('ADD A B', state); // A = A + B   
+    StateMachine.process('ADD C A', state); // C = C + A
+    StateMachine.process('ADD C 5', state); // C = C + 5
+    expect(state['C']).toBe(70);
+  });
+  //
+  it('Should substract numbers with SUB', () => {
+    const state = {
+      'A': 42,
+      'B': 2,
+      'C': 21
+    };
+    StateMachine.process('SUB A B', state); // A = A - B
+    StateMachine.process('SUB A C', state); // A = A - C
+    StateMachine.process('SUB A 5', state); // A = A - 5
+    expect(state['A']).toBe(14);
+  });
 });

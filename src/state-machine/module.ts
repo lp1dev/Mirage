@@ -116,13 +116,38 @@ function ifInstruction(params: Array<string>, state: State) {
   }
 }
 
+function calc(type: string, params: Array<string>, state: State) {
+  if (params.length !== 2) {
+    throw new InvalidInstructionFormatException([type, ...params].join(' '));
+  }
+  const a = isNaN(parseInt(params[0])) ? state[params[0]] : parseInt(params[0]);
+  const b = isNaN(parseInt(params[1])) ? state[params[1]] : parseInt(params[1]);
+  if (!a || !b) {
+    throw new UndefinedValueException(a ? a : b);
+  }
+  switch (type) {
+    case 'ADD':
+      state[params[0]] = a + b;
+      break;
+    case 'SUB':
+      state[params[0]] = a - b;
+      break;
+    case 'MUL':
+      state[params[0]] = a * b;
+      break;
+  }
+}
+
 module StateMachine {
   const instructionTypes = {
     'GOTO': goto,
     'SET': set,
     'COPY': copy,
     'ROLL': roll,
-    'IF': ifInstruction
+    'IF': ifInstruction,
+    'ADD': (params, state) => calc('ADD', params, state),
+    'SUB': (params, state) => calc('SUB', params, state),
+    'MUL': (params, state) => calc('MUL', params, state)
   }
 
   export function handleInstruction(
