@@ -40,6 +40,9 @@ class InvalidInstructionTypeException extends Exception {
   type = 'InvalidInstructionTypeException';
 };
 
+class UndefinedValueException extends Exception { 
+  type = 'UndefinedValueException';
+};
 
 export { 
   InvalidDataFormatException, 
@@ -48,5 +51,6 @@ export {
   InvalidLocaleSpecifiedException,
   InvalidStateException,
   InvalidInstructionFormatException,
-  InvalidInstructionTypeException
+  InvalidInstructionTypeException,
+  UndefinedValueException
 };
