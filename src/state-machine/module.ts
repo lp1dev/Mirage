@@ -46,38 +46,30 @@ function roll(params: Array<string>, state: State) {
   set([params[1], value], state);
 }
 
-function evaluate(expression: string, state: State) {
-  let output = null;
-
+function evaluate(expressionString: string, state: State) {
   let conditionals = [];
-  let expressions = [];
+  let expressions = [[]];
   let results = [];
-  let result = null;
 
-  if (expression.indexOf('AND') !== -1) {
-    expressions = expressions.concat(expression.split('AND'));
-    conditionals.push('AND');
-  }
-  if (expression.indexOf('OR') !== -1) {
-    expressions = expressions.concat(expression.split('OR'));
-    conditionals.push('OR');
-  }
-  if (expressions.length === 0) {
-    expressions.push(expression);
-  }
+  expressionString.trim().split(' ').forEach(term => {
+    if (term == 'AND' || term == 'OR') {
+      expressions.push([]);
+      conditionals.push(term);
+    } else {
+      expressions[expressions.length - 1].push(term);
+    }
+  });
   expressions.forEach(expression => {
     let leftValue = null;
     let rightValue = null;
     let operand = null;
 
-    expression = expression.trim().split(' ');
     expression.forEach(term => {
       if (knownOperands.indexOf(term) !== -1) {
         if (!leftValue) {
           throw new InvalidInstructionFormatException(expression.join(' '));
-        } else {
-          operand = term;
         }
+        operand = term;
       } else {
         const value = state[term] ? state[term] : term;
         if (!leftValue) {
@@ -88,13 +80,13 @@ function evaluate(expression: string, state: State) {
           throw new InvalidInstructionFormatException(expression.join(' '));
         }
       }
-    })
+    });
     results.push(operands[operand](leftValue, rightValue));
   });
   if (conditionals.length) {
     conditionals.forEach((conditional, index) => {
       if (index + 1 > results.length) {
-        throw new InvalidInstructionFormatException(expression);
+        throw new InvalidInstructionFormatException(expressionString);
       }
       if (conditional == 'AND') {
         results.push(results[index] && results[index + 1]);
@@ -102,10 +94,8 @@ function evaluate(expression: string, state: State) {
         results.push(results[index] || results[index + 1]);
       }
     });
-    return results.pop();
-  } else {
-    return results.shift();
   }
+  return results.pop();
 }
 
 function ifInstruction(params: Array<string>, state: State) {

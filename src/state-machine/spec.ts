@@ -65,4 +65,14 @@ describe('State Machine', () => {
     StateMachine.process('IF TEST IS 42 AND CHAPTER1 == TRUE THEN GOTO CHAPTER_1', state);
     expect(state['question']).toBe('CHAPTER_1');
   })
+  //
+  it('Should handle IF ELSE statements with multiple AND and OR conditionals', () => {
+    const state = {
+      'TEST': 42,
+      'GAME_INTRO': 'FALSE',
+      'CHAPTER1': 'TRUE'
+    };
+    StateMachine.process('IF TEST IS 42 AND GAME_INTRO IS TRUE OR CHAPTER1 IS TRUE THEN GOTO PASSED', state);
+    expect(state['question']).toBe('PASSED');
+  })
 });
