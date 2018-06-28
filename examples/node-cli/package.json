@@ -1,0 +1,14 @@
+{
+    "name": "mirage-example-node",
+    "version": "1.0.0",
+    "description": "Mirage game engine example",
+    "main": "run.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Jérémie Amsellem <lp1.eu>",
+    "license": "MIT",
+    "dependencies": {
+        "mirage": "file:../.."
+    }
+}

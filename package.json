@@ -1,8 +1,8 @@
 {
-  "name": "modern-text-game-engine",
+  "name": "mirage",
   "version": "1.0.0",
-  "description": "Modern Text-based game engine",
-  "main": "dist/mtge.js",
+  "description": "Modern Interactive Retro Aventure Game Engine",
+  "main": "dist/mirage.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lp1dev/Modern-Text-Game-Engine.git"
