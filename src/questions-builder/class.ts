@@ -9,8 +9,9 @@ class QuestionsBuilder {
   }
 
   build(question: Question) {
-    if (this.cache[question.text] !== undefined) {
-      return this.cache[question.text];
+    const id = question.id || question.text;
+    if (this.cache[id] !== undefined) {
+      return this.cache[id];
     }
     const builtQuestion: Question = {
       text: this.textLoader.get(question.text),
@@ -19,7 +20,7 @@ class QuestionsBuilder {
     for (let key in question.answers) {
       builtQuestion.answers[this.textLoader.get(key)] = question.answers[key];
     }
-    this.cache[question.text] = builtQuestion;
+    this.cache[id] = builtQuestion;
     return builtQuestion;
   }
 }

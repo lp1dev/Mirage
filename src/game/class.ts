@@ -13,7 +13,7 @@ export class Game {
 
    constructor(
             private gameData: GameData,
-            private textData: TextData,
+            private textData: TextData = {},
             private locale: string = 'EN_en',
             private saveData?: SaveData) {
         this.gameData = gameData;
@@ -52,7 +52,7 @@ export class Game {
             }
         } else {
             const results = this.gameData.questions.filter(question => {
-                return question.text == id;
+                return question.id == id || question.text == id;
             })
             if (!results.length) {
                 throw new InvalidQuestionIdException(id);                

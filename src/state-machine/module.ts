@@ -120,10 +120,12 @@ function calc(type: string, params: Array<string>, state: State) {
   if (params.length !== 2) {
     throw new InvalidInstructionFormatException([type, ...params].join(' '));
   }
-  const a = isNaN(parseInt(params[0])) ? state[params[0]] : parseInt(params[0]);
+  let a = isNaN(parseInt(params[0])) ? state[params[0]] : parseInt(params[0]);
   const b = isNaN(parseInt(params[1])) ? state[params[1]] : parseInt(params[1]);
-  if (!a || !b) {
+  if (!b) {
     throw new UndefinedValueException(a ? a : b);
+  } else if (!a) {
+    state[params[0]] = a = 0;
   }
   switch (type) {
     case 'ADD':

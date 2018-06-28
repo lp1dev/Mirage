@@ -6,7 +6,7 @@ class TextLoader {
 
   get(id: string) {
     if (!this.textData[id]) {
-      throw new InvalidTextIdException(id);
+      return id;
     } else if (!this.textData[id][this.locale]){
       throw new InvalidLocaleSpecifiedException(this.locale);
     } else {

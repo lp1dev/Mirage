@@ -9,6 +9,7 @@
     "author": "Jérémie Amsellem <lp1.eu>",
     "license": "MIT",
     "dependencies": {
-        "mirage": "file:../.."
+        "mirage": "file:../..",
+        "prompt-sync": "^4.1.6"
     }
 }

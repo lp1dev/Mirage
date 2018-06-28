@@ -75,6 +75,15 @@ describe('State Machine', () => {
     StateMachine.process('IF TEST IS 42 AND GAME_INTRO IS TRUE OR CHAPTER1 IS TRUE THEN GOTO PASSED', state);
     expect(state['question']).toBe('PASSED');
   });
+  it('Should handle >= > < <= conditionals', () => {
+    const state = {
+      'TEST': 42
+    };
+    StateMachine.process('IF TEST > 41 THEN GOTO CHAPTER1', state);
+    expect(state['question']).toBe('CHAPTER1');
+    StateMachine.process('IF TEST < 43 THEN GOTO CHAPTER2', state);
+    expect(state['question']).toBe('CHAPTER2');
+  })
   //
   it('Should handle IF ELSE IF statements', () => {
     const state = {
@@ -88,10 +97,10 @@ describe('State Machine', () => {
   //
   it('Should add numbers with ADD', () => {
     const state = {
-      'A': 42,
       'B': 2,
       'C': 21
     };
+    StateMachine.process('ADD A 42', state);
     StateMachine.process('ADD A B', state); // A = A + B   
     StateMachine.process('ADD C A', state); // C = C + A
     StateMachine.process('ADD C 5', state); // C = C + 5
