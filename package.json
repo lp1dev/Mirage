@@ -5,14 +5,14 @@
   "main": "dist/mirage.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lp1dev/Modern-Text-Game-Engine.git"
+    "url": "git+https://github.com/lp1dev/Mirage.git"
   },
   "author": "Lp1 <mail@lp1.eu>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lp1dev/Modern-Text-Game-Engine/issues"
+    "url": "https://github.com/lp1dev/Mirage/issues"
   },
-  "homepage": "https://github.com/lp1dev/Modern-Text-Game-Engine#readme",
+  "homepage": "https://github.com/lp1dev/Mirage#readme",
   "scripts": {
     "test": "concurrently 'npm run tsc:w' 'karma start karma.conf.js'",
     "tsc": "tsc",
