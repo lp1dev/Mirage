@@ -1,5 +1,5 @@
-# Mirage
-## (Modern Interactive Retro Adventure Game Engine)
+# MIRAGE
+## Modern Interactive Retro Adventure Game Engine
 
 Mirage is a retro adventure game engine written in TypeScript/JavaScript.
 
@@ -11,6 +11,7 @@ It requires a JSON game file, containing game configuration and logic. You can h
 
 For more information you can read the [documentation](./doc/).
 ![node-screenshot](https://raw.githubusercontent.com/lp1dev/Mirage/master/examples/screens/screen_node.gif)
+![android-screenshot](https://raw.githubusercontent.com/lp1dev/mirage-ionic-example/master/screens/android.gif)
 
 ## Build
 
