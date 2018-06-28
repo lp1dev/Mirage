@@ -5,7 +5,9 @@ Mirage is a retro adventure game engine written in TypeScript/JavaScript.
 
 The goal of this project is to build a quick and easy to use tool to build one's own text game.
 
-It requires a JSON game file, containing game configuration and logic.
+It can be used with Node.JS, web applications and mostly anything running with TypeScript/JavaScript.
+
+It requires a JSON game file, containing game configuration and logic. You can have a look at this [example file](./examples/node-cli/game.json)
 
 For more information you can read the [documentation](./doc/).  
 ![node-screenshot](https://raw.githubusercontent.com/lp1dev/Mirage/master/examples/screens/screen_node.gif)
