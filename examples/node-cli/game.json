@@ -41,14 +41,14 @@
             "text": "The pie really smells good and apparently no one's looking. Are you sure you dont want to take a little bite?",
             "answers": {
                 "Fine, I'll eat your damn pie!": "GOTO QUESTION3",
-                "No.": "ADD PIE 1; IF PIE IS 10 THEN GOTO QUESTION2 ELSE GOTO QUESTION2_NOPIE"
+                "No.": "ADD PIE 1; IF PIE >= 10 THEN GOTO QUESTION2_NOPIE ELSE GOTO QUESTION2"
             }
         },
         {
             "id": "QUESTION2_NOPIE",
-            "text": "Fine! You're a good boy and don't eat the pie. Does it make you feel good about yourself? I hope so! Thanks for trying to ruin my scenario! It's not like I care anyway...",
+            "text": "Fine! You're a good boy and don't eat the pie. Does it make you feel good about yourself? I hope so!",
             "answers": {
-                "...": "GOTO QUESTION3"
+                "Get my reward.": "GOTO QUESTION3"
             }
         },
         {
@@ -64,7 +64,7 @@
             "text": "You scream 'WOOF WOOOooOOF' but no one is answering for the moment. There is a door on the other side of the room, you can try to leave or maybe reconsider eating the pie?",
             "answers": {
                 "Fine, I'll eat your damn pie!": "GOTO QUESTION3",
-                "Let's leave": "IF PLAYER IS HUMAN THEN GOTO QUESTION3",
+                "Let's leave": "IF PLAYER IS HUMAN THEN GOTO QUESTION3 ELSE GOTO QUESTION3_DOG",
                 "Let's woof again!": "ADD WOOFS 1; IF WOOFS > 5 THEN GOTO QUESTION3"
             }
         },
@@ -77,7 +77,7 @@
         },
         {
             "id": "QUESTION3",
-            "text": "The kitchen's wooden door opens and you find a big red haired man behind, standing in the middle of a long corridor.\nHe looks at you, surprised and yells:\n- Hey ! What are you doing here?",
+            "text": "The kitchen's wooden door opens and you find a big red haired man behind, standing in the middle of a long corridor.\nHe looks at you, surprised and yells:\n- Hey! What are you doing here? Did you break in to eat my delicious pie?!",
             "answers": {
                 "Run!": "GOTO QUESTION4",
                 "Say: Good evening! I don't exactly know how I ended up in your kitchen but I'm sure there is a logical explanation!": "IF PLAYER IS DOG THEN GOTO QUESTION5_DOG ELSE GOTO QUESTION5"
@@ -113,6 +113,10 @@
                 "Time to run!": "GOTO QUESTION4",
                 "Say : Wait, I'm sure we can talk this through!": "GOTO QUESTION4_FAILED"
             }
+        },
+        {
+            "id": "QUESTION6",
+            "text": "This is the end of this demo game!\nThanks for playing, I hope you learned how Mirage engine is working\nand that you've had fun! See you!\nLp1."
         }
     ]
 }

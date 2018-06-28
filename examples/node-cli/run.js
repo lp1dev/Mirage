@@ -16,23 +16,22 @@ const gameOn = true;
 while (gameOn) {
   const question = game.display();
   // Displaying the question
-  process.stdout.write('\033c');
-  console.log(`${'-'.repeat(process.stdout.columns)}`)
-  console.log(`~ ${question.text} ~`)
-  console.log(`${'-'.repeat(process.stdout.columns)}\n\n`)  
+  console.clear();
+  console.log(`${'-'.repeat(process.stdout.columns)}\n`)
+  console.log(`~ ${question.text} ~\n`)
+  console.log(`${'-'.repeat(process.stdout.columns)}\n`)
   // Displaying the answers
   let i = 0;
   for (let answer in question.answers) {
-    console.log(`${++i} : ${answer}`);
+    console.log(`${++i} - ${answer}\n`);
   }
   // Verifying User input
   const answerNum = parseInt(prompt());
   if (isNaN(answerNum) || answerNum > question.answers.length || answerNum < 1) {
     console.log('-- Invalid answer! --')
   } else {
-    // Sending the answer
+    // Sending the answer to the game
     const answer = Object.keys(question.answers)[answerNum - 1]
-    console.log('\nYou said: ', answer);
     game.answer(answer);
   }
 }
