@@ -5,7 +5,7 @@ export declare class Game {
     private gameData;
     private textData;
     private locale;
-    private saveData?;
+    private saveData;
     private textLoader;
     private questionsBuilder;
     private state;
