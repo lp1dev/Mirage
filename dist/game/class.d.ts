@@ -1,11 +1,12 @@
 import { GameData, SaveData } from './interfaces';
 import { TextData } from '../text-loader/interfaces';
+import { State } from '../state-machine/interfaces';
 import { Question } from '../questions-builder/interfaces';
 export declare class Game {
     private gameData;
     private textData;
     private locale;
-    private saveData;
+    private saveData?;
     private textLoader;
     private questionsBuilder;
     private state;
@@ -14,7 +15,9 @@ export declare class Game {
     answer(answer: string): void;
     display(): Question;
     question(id: any): Question;
+    getSaveData(): {
+        state: State;
+        question: any;
+    };
     readonly name: string;
-    readonly questions: Question[];
-    readonly lastQuestion: number;
 }

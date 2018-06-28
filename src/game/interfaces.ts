@@ -10,7 +10,6 @@ interface GameData {
 
 interface SaveData {
   question: number;
-  answers: Array<string>;
   state: State;
 }
 

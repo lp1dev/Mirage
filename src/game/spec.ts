@@ -10,14 +10,14 @@ describe('Game', () => {
       const game = new Game(gameData, textData);
       game.start();
       expect(game.name).toBe(gameData.name);
-  })
+  });
   //
   it('should start with the first question', () => {
     const game = new Game(gameData, textData);
     game.start();
     const question = game.display();
     expect(question.text).toBe(textData['GAME_INTRO']['EN_en']);
-  })
+  });
   //
   it('should allow to answer a question and go to the next one', () => {
     const game = new Game(gameData, textData);
@@ -25,5 +25,13 @@ describe('Game', () => {
     game.answer(textData['GAME_INTRO2']['EN_en']);
     const nextQuestion = game.display();
     expect(nextQuestion.text).toBe(textData['CHAPTER1']['EN_en']);
-  })
+  });
+  //
+  it('should save the game state and use it', () => {
+    let game = new Game(gameData, textData);
+    game.start();
+    const saveData = game.getSaveData();
+    game = new Game(gameData, textData, 'EN_en', saveData);
+    expect(game.display().text).toBe(textData['GAME_INTRO']['EN_en']);
+  });
 });

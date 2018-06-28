@@ -13,9 +13,9 @@ var Game = (function () {
         this.locale = locale;
         this.saveData = saveData;
         this.gameData = gameData;
-        this.saveData = this.saveData ? this.saveData : { question: 0, answers: [], state: {} };
+        this.saveData = this.saveData ? this.saveData : { question: 0, state: {} };
         this.state = this.saveData.state;
-        this.textLoader = new class_1.default(this.textData, 'EN_en');
+        this.textLoader = new class_1.default(this.textData, locale);
         this.questionsBuilder = new class_2.default(this.textLoader);
     }
     Game.prototype.start = function () {
@@ -55,23 +55,15 @@ var Game = (function () {
             }
         }
     };
+    Game.prototype.getSaveData = function () {
+        return {
+            state: this.state,
+            question: this.state['question']
+        };
+    };
     Object.defineProperty(Game.prototype, "name", {
         get: function () {
             return this.gameData.name;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Game.prototype, "questions", {
-        get: function () {
-            return this.gameData.questions;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Game.prototype, "lastQuestion", {
-        get: function () {
-            return this.saveData.question;
         },
         enumerable: true,
         configurable: true

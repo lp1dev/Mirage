@@ -22,5 +22,12 @@ describe('Game', function () {
         var nextQuestion = game.display();
         expect(nextQuestion.text).toBe(texts_1.textData['CHAPTER1']['EN_en']);
     });
+    it('should save the game state and use it', function () {
+        var game = new class_1.Game(game_1.default, texts_1.textData);
+        game.start();
+        var saveData = game.getSaveData();
+        game = new class_1.Game(game_1.default, texts_1.textData, 'EN_en', saveData);
+        expect(game.display().text).toBe(texts_1.textData['GAME_INTRO']['EN_en']);
+    });
 });
 //# sourceMappingURL=spec.js.map

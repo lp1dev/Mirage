@@ -28,4 +28,4 @@ declare class InvalidInstructionTypeException extends Exception {
 declare class UndefinedValueException extends Exception {
     type: string;
 }
-export { InvalidDataFormatException, InvalidQuestionIdException, InvalidTextIdException, InvalidLocaleSpecifiedException, InvalidStateException, InvalidInstructionFormatException, InvalidInstructionTypeException, UndefinedValueException };
+export { InvalidDataFormatException, InvalidQuestionIdException, InvalidTextIdException, InvalidLocaleSpecifiedException, InvalidStateException, InvalidInstructionFormatException, InvalidInstructionTypeException, UndefinedValueException, };

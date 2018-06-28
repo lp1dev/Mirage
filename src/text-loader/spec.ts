@@ -18,4 +18,9 @@ describe('TextLoader', () => {
     loader.setLocale('EN_en');
     expect(loader.get('GAME_INTRO')).toBe(textData['GAME_INTRO']['EN_en']);
   })
+  //
+  it('should return the text id if there is no matching text', () => {
+    const loader = new TextLoader(textData, 'FR_fr');
+    expect(loader.get('INVALID_ID')).toBe('INVALID_ID'); 
+  });
 });

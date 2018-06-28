@@ -16,5 +16,9 @@ describe('TextLoader', function () {
         loader.setLocale('EN_en');
         expect(loader.get('GAME_INTRO')).toBe(texts_1.textData['GAME_INTRO']['EN_en']);
     });
+    it('should return the text id if there is no matching text', function () {
+        var loader = new class_1.default(texts_1.textData, 'FR_fr');
+        expect(loader.get('INVALID_ID')).toBe('INVALID_ID');
+    });
 });
 //# sourceMappingURL=spec.js.map

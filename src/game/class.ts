@@ -18,9 +18,9 @@ export class Game {
             private locale: string = 'EN_en',
             private saveData?: SaveData) {
         this.gameData = gameData;
-        this.saveData = this.saveData ? this.saveData :  { question: 0, answers: [], state: {} };
+        this.saveData = this.saveData ? this.saveData :  { question: 0, state: {} };
         this.state = this.saveData.state;
-        this.textLoader = new TextLoader(this.textData, 'EN_en');
+        this.textLoader = new TextLoader(this.textData, locale);
         this.questionsBuilder = new QuestionsBuilder(this.textLoader);
     }
 
@@ -63,17 +63,17 @@ export class Game {
         }
     }
 
+    getSaveData() {
+        return {
+            state: this.state,
+            question: this.state['question']
+        }
+    }
+
     // Getters
 
     get name() {
         return this.gameData.name;
     }
 
-    get questions() {
-        return this.gameData.questions;
-    }
-
-    get lastQuestion() {
-        return this.saveData.question;
-    }
 }
