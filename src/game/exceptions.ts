@@ -1,4 +1,4 @@
-class Exception {
+export class Exception {
   private params: Array<any>;
   type = 'Exception';
 
@@ -52,5 +52,5 @@ export {
   InvalidStateException,
   InvalidInstructionFormatException,
   InvalidInstructionTypeException,
-  UndefinedValueException
+  UndefinedValueException,
 };

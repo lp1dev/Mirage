@@ -4,9 +4,7 @@ const promptSync = require('prompt-sync')
 const Game = require('mirage').Game;
 const gameData = require('./game.json');
 
-const prompt = promptSync({
-  sigint: true
-});
+const prompt = promptSync({ sigint: true });
 
 const game = new Game(gameData);
 game.start();

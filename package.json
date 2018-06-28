@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Modern Interactive Retro Aventure Game Engine",
   "main": "dist/mirage.js",
+  "types": "dist/mirage.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lp1dev/Mirage.git"

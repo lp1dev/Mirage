@@ -5,7 +5,8 @@
         "outDir": "dist/",
         "rootDir": "src",
         "removeComments": true,
-        "sourceMap": false,
+        "sourceMap": true,
+        "declaration": true,
         "module": "CommonJS"
   }
 }

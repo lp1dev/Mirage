@@ -5,6 +5,7 @@ import QuestionsBuilder from '../questions-builder/class';
 import { TextData } from '../text-loader/interfaces';
 import { State } from '../state-machine/interfaces';
 import StateMachine from '../state-machine/module';
+import { Question } from '../questions-builder/interfaces';
 
 export class Game {
     private textLoader: TextLoader;
@@ -25,17 +26,17 @@ export class Game {
 
     // Methods
 
-    start() {
+    start(): void {
         this.state = StateMachine.process(this.gameData.startInstruction, this.state);
     }
 
-    answer(answer: string) {
+    answer(answer: string): void {
         const question = this.question(this.state.question);
         const instruction = question.answers[answer];
         StateMachine.process(instruction, this.state);
     }
 
-    display() {
+    display(): Question {
         if (!this.state['question']) {
             throw new InvalidStateException(JSON.stringify(this.state));
         } else {
@@ -43,7 +44,7 @@ export class Game {
         }
     }
 
-    question(id: any) {
+    question(id: any): Question {
         if (typeof(id) == 'number') {
             if (id >= 0 && id < this.gameData.questions.length) {
                 return this.questionsBuilder.build(this.gameData.questions[id]);
