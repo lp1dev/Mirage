@@ -1,6 +1,6 @@
 # Game
 
-The Game
+## Class
 
 ```
 class Game {
@@ -59,4 +59,24 @@ class Game {
 ```
 const game = new Game(gameData, textData, locale, saveData);
 game.start();
+```
+
+## Interfaces
+
+```
+interface GameData {
+  name: string;
+  theme: string;
+  questions: Array<Question>;
+  startInstruction: string;
+}
+
+interface SaveData {
+  question: number;
+  state: State;
+}
+
+interface TextData {
+  [key: string]: any;
+}
 ```
