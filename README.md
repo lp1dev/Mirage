@@ -8,6 +8,7 @@ The goal of this project is to build a quick and easy to use tool to build one's
 It requires a JSON game file, containing game configuration and logic.
 
 For more information you can read the [documentation](./doc/).  
+![node-screenshot](https://raw.githubusercontent.com/lp1dev/Mirage/master/examples/screens/screen_node.gif)
 
 MIT Licensed
     
