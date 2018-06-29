@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var exceptions_1 = require("../game/exceptions");
-var knownOperands = ['==', 'IS', 'IS_NOT', '!=', '>', '<', '>=', '<='];
+var knownOperands = ['==', 'is', 'isn\'t', '!=', '>', '<', '>=', '<='];
 var operands = {
     '==': function (a, b) { return a == b; },
-    'IS': function (a, b) { return a === b; },
-    'IS_NOT': function (a, b) { return a !== b; },
+    'is': function (a, b) { return a === b; },
+    'isn\'t': function (a, b) { return a !== b; },
     '!=': function (a, b) { return a !== b; },
     '>': function (a, b) { return a > b; },
     '<': function (a, b) { return a < b; },
@@ -28,22 +28,22 @@ function copy(params, state) {
     set([params[1], state[params[0]]], state);
 }
 function roll(params, state) {
-    if (params.length !== 2 || !params[1]) {
+    if (params.length !== 2 || !params[0]) {
         throw new exceptions_1.InvalidInstructionFormatException('Invalid parameters', params);
     }
-    var dice = parseInt(params[0]);
+    var dice = parseInt(params[1]);
     if (isNaN(dice) || dice > 1000 || dice <= 0) {
         throw new exceptions_1.InvalidInstructionFormatException('Invalid dice type', params[0]);
     }
     var value = Math.ceil(Math.random() * dice);
-    set([params[1], value], state);
+    set([params[0], value], state);
 }
 function evaluate(expressionString, state) {
     var conditionals = [];
     var expressions = [[]];
     var results = [];
     expressionString.trim().split(' ').forEach(function (term) {
-        if (term == 'AND' || term == 'OR') {
+        if (term == 'and' || term == 'or') {
             expressions.push([]);
             conditionals.push(term);
         }
@@ -82,10 +82,10 @@ function evaluate(expressionString, state) {
             if (index + 1 > results.length) {
                 throw new exceptions_1.InvalidInstructionFormatException(expressionString);
             }
-            if (conditional == 'AND') {
+            if (conditional == 'and') {
                 results.push(results[index] && results[index + 1]);
             }
-            else if (conditional == 'OR') {
+            else if (conditional == 'or') {
                 results.push(results[index] || results[index + 1]);
             }
         });
@@ -93,10 +93,10 @@ function evaluate(expressionString, state) {
     return results.pop();
 }
 function ifInstruction(params, state) {
-    var thenPosition = params.indexOf('THEN');
-    var elsePosition = params.indexOf('ELSE');
+    var thenPosition = params.indexOf('then');
+    var elsePosition = params.indexOf('else');
     if (thenPosition === -1) {
-        throw new exceptions_1.InvalidInstructionFormatException('IF expression should contain an ELSE statement');
+        throw new exceptions_1.InvalidInstructionFormatException('if expression should contain an else statement');
     }
     else {
         var ifExpression = params.slice(0, thenPosition);
@@ -124,13 +124,13 @@ function calc(type, params, state) {
         state[params[0]] = a = 0;
     }
     switch (type) {
-        case 'ADD':
+        case 'add':
             state[params[0]] = a + b;
             break;
-        case 'SUB':
+        case 'sub':
             state[params[0]] = a - b;
             break;
-        case 'MUL':
+        case 'mul':
             state[params[0]] = a * b;
             break;
     }
@@ -138,21 +138,22 @@ function calc(type, params, state) {
 var StateMachine;
 (function (StateMachine) {
     var instructionTypes = {
-        'GOTO': goto,
-        'SET': set,
-        'COPY': copy,
-        'ROLL': roll,
-        'IF': ifInstruction,
-        'ADD': function (params, state) { return calc('ADD', params, state); },
-        'SUB': function (params, state) { return calc('SUB', params, state); },
-        'MUL': function (params, state) { return calc('MUL', params, state); }
+        'goto': goto,
+        'set': set,
+        'copy': copy,
+        'roll': roll,
+        'if': ifInstruction,
+        'add': function (params, state) { return calc('add', params, state); },
+        'sub': function (params, state) { return calc('sub', params, state); },
+        'mul': function (params, state) { return calc('mul', params, state); }
     };
-    function handleInstruction(instruction, state) {
-        if (instructionTypes[instruction.type]) {
-            instructionTypes[instruction.type](instruction.params, state);
+    function handleInstruction(type, params, state) {
+        type = type.toLowerCase();
+        if (instructionTypes[type]) {
+            instructionTypes[type](params, state);
         }
         else {
-            throw new exceptions_1.InvalidInstructionTypeException(instruction.type);
+            throw new exceptions_1.InvalidInstructionTypeException(type);
         }
     }
     StateMachine.handleInstruction = handleInstruction;
@@ -167,12 +168,9 @@ var StateMachine;
                 goto(splitInstruction, state);
                 return state;
             }
-            var type = splitInstruction.splice(0, 1)[0];
+            var type = splitInstruction.shift();
             var params = splitInstruction;
-            handleInstruction({
-                type: type,
-                params: params
-            }, state);
+            handleInstruction(type, params, state);
         });
         return state;
     }

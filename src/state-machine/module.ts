@@ -3,12 +3,12 @@ import { InvalidInstructionFormatException, InvalidInstructionTypeException, Und
 
 // Instructions
 
-const knownOperands = ['==', 'IS', 'IS_NOT', '!=', '>', '<', '>=', '<='];
+const knownOperands = ['==', 'is', 'isn\'t', '!=', '>', '<', '>=', '<='];
 
 const operands = {
   '==': (a, b) => a == b,
-  'IS': (a, b) => a === b,
-  'IS_NOT': (a, b) => a !== b,
+  'is': (a, b) => a === b,
+  'isn\'t': (a, b) => a !== b,
   '!=': (a, b) => a !== b,
   '>': (a, b) => a > b,
   '<': (a, b) => a < b,
@@ -35,15 +35,15 @@ function copy(params: Array<string>, state: State) {
 }
 
 function roll(params: Array<string>, state: State) {
-  if (params.length !== 2 || !params[1]) {
+  if (params.length !== 2 || !params[0]) {
     throw new InvalidInstructionFormatException('Invalid parameters', params);
   }
-  const dice = parseInt(params[0]);
+  const dice = parseInt(params[1]);
   if (isNaN(dice) || dice > 1000 || dice <= 0) {
     throw new InvalidInstructionFormatException('Invalid dice type', params[0]);
   }
   const value = Math.ceil(Math.random() * dice);
-  set([params[1], value], state);
+  set([params[0], value], state);
 }
 
 function evaluate(expressionString: string, state: State) {
@@ -52,7 +52,7 @@ function evaluate(expressionString: string, state: State) {
   let results = [];
 
   expressionString.trim().split(' ').forEach(term => {
-    if (term == 'AND' || term == 'OR') {
+    if (term == 'and' || term == 'or') {
       expressions.push([]);
       conditionals.push(term);
     } else {
@@ -88,9 +88,9 @@ function evaluate(expressionString: string, state: State) {
       if (index + 1 > results.length) {
         throw new InvalidInstructionFormatException(expressionString);
       }
-      if (conditional == 'AND') {
+      if (conditional == 'and') {
         results.push(results[index] && results[index + 1]);
-      } else if (conditional == 'OR') {
+      } else if (conditional == 'or') {
         results.push(results[index] || results[index + 1]);
       }
     });
@@ -99,10 +99,10 @@ function evaluate(expressionString: string, state: State) {
 }
 
 function ifInstruction(params: Array<string>, state: State) {
-  const thenPosition = params.indexOf('THEN');
-  const elsePosition = params.indexOf('ELSE');
+  const thenPosition = params.indexOf('then');
+  const elsePosition = params.indexOf('else');
   if (thenPosition === -1) {
-    throw new InvalidInstructionFormatException('IF expression should contain an ELSE statement');
+    throw new InvalidInstructionFormatException('if expression should contain an else statement');
   } else {
     const ifExpression = params.slice(0, thenPosition);
     const result = evaluate(ifExpression.join(' '), state);
@@ -128,13 +128,13 @@ function calc(type: string, params: Array<string>, state: State) {
     state[params[0]] = a = 0;
   }
   switch (type) {
-    case 'ADD':
+    case 'add':
       state[params[0]] = a + b;
       break;
-    case 'SUB':
+    case 'sub':
       state[params[0]] = a - b;
       break;
-    case 'MUL':
+    case 'mul':
       state[params[0]] = a * b;
       break;
   }
@@ -142,22 +142,22 @@ function calc(type: string, params: Array<string>, state: State) {
 
 module StateMachine {
   const instructionTypes = {
-    'GOTO': goto,
-    'SET': set,
-    'COPY': copy,
-    'ROLL': roll,
-    'IF': ifInstruction,
-    'ADD': (params, state) => calc('ADD', params, state),
-    'SUB': (params, state) => calc('SUB', params, state),
-    'MUL': (params, state) => calc('MUL', params, state)
+    'goto': goto,
+    'set': set,
+    'copy': copy,
+    'roll': roll,
+    'if': ifInstruction,
+    'add': (params, state) => calc('add', params, state),
+    'sub': (params, state) => calc('sub', params, state),
+    'mul': (params, state) => calc('mul', params, state)
   }
 
-  export function handleInstruction(
-    instruction: Instruction, state: State) {
-    if (instructionTypes[instruction.type]) {
-      instructionTypes[instruction.type](instruction.params, state);
+  export function handleInstruction(type: string, params: Array<string>, state: State) {
+    type = type.toLowerCase();
+    if (instructionTypes[type]) {
+      instructionTypes[type](params, state);
     } else {
-      throw new InvalidInstructionTypeException(instruction.type);
+      throw new InvalidInstructionTypeException(type);
     }
   }
 
@@ -172,12 +172,9 @@ module StateMachine {
         goto(splitInstruction, state);
         return state;
       }
-      const type = splitInstruction.splice(0, 1)[0];
+      const type = splitInstruction.shift();
       const params = splitInstruction;
-      handleInstruction({
-        type: type,
-        params: params
-      }, state);
+      handleInstruction(type, params, state);
     });
     return state;
   }
