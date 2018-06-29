@@ -166,7 +166,11 @@ module StateMachine {
     instructions.forEach(instruction => {
       const splitInstruction = instruction.split(' ').filter(s => s.length);
       if (splitInstruction.length < 2) {
-        throw new InvalidInstructionFormatException(instruction);
+        if (instructionTypes[splitInstruction[0]]) {
+          throw new InvalidInstructionFormatException('Missing parameter(s) in '+ instructionsString);
+        }
+        goto(splitInstruction, state);
+        return state;
       }
       const type = splitInstruction.splice(0, 1)[0];
       const params = splitInstruction;

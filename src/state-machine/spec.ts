@@ -2,13 +2,21 @@ import StateMachine from './module';
 import { InvalidInstructionFormatException } from '../game/exceptions';
 
 describe('State Machine', () => {
-  it('Should throw an exception when an invalid instruction is given', () => {
-    expect(() => StateMachine.process('NOOP', {})).toThrow();
+  it('Should allow to set the question state with GOTO', () => {
+    const state = {};
+    StateMachine.process('GOTO GAME_INTRO', state);
+    expect(state['question']).toBe('GAME_INTRO');
   });
   //
   it('Should allow to set the question state with GOTO', () => {
     const state = {};
     StateMachine.process('GOTO GAME_INTRO', state);
+    expect(state['question']).toBe('GAME_INTRO');
+  });
+  //
+  it('Should allow to set the question state without an implicit GOTO', () => {
+    const state = {};
+    StateMachine.process('GAME_INTRO', state);
     expect(state['question']).toBe('GAME_INTRO');
   });
   //

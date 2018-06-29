@@ -161,7 +161,11 @@ var StateMachine;
         instructions.forEach(function (instruction) {
             var splitInstruction = instruction.split(' ').filter(function (s) { return s.length; });
             if (splitInstruction.length < 2) {
-                throw new exceptions_1.InvalidInstructionFormatException(instruction);
+                if (instructionTypes[splitInstruction[0]]) {
+                    throw new exceptions_1.InvalidInstructionFormatException('Missing parameter(s) in ' + instructionsString);
+                }
+                goto(splitInstruction, state);
+                return state;
             }
             var type = splitInstruction.splice(0, 1)[0];
             var params = splitInstruction;

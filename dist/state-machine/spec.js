@@ -2,12 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_1 = require("./module");
 describe('State Machine', function () {
-    it('Should throw an exception when an invalid instruction is given', function () {
-        expect(function () { return module_1.default.process('NOOP', {}); }).toThrow();
+    it('Should allow to set the question state with GOTO', function () {
+        var state = {};
+        module_1.default.process('GOTO GAME_INTRO', state);
+        expect(state['question']).toBe('GAME_INTRO');
     });
     it('Should allow to set the question state with GOTO', function () {
         var state = {};
         module_1.default.process('GOTO GAME_INTRO', state);
+        expect(state['question']).toBe('GAME_INTRO');
+    });
+    it('Should allow to set the question state without an implicit GOTO', function () {
+        var state = {};
+        module_1.default.process('GAME_INTRO', state);
         expect(state['question']).toBe('GAME_INTRO');
     });
     it('Should only take a GOTO with a parameter and throw otherwise', function () {
