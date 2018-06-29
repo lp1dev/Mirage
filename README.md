@@ -9,11 +9,18 @@ It can be used with Node.JS, web applications and mostly anything running with T
 
 It requires a JSON game file, containing game configuration and logic. You can have a look at this [example file](./examples/node-cli/game.json)
 
-For more information you can read the [documentation](./doc/).
+For more information please read the [documentation](./doc/).
+
+### Node.js Example
 ![node-screenshot](https://raw.githubusercontent.com/lp1dev/Mirage/master/examples/screens/screen_node.gif)
+### Android (Ionic) Example
 ![android-screenshot](https://raw.githubusercontent.com/lp1dev/mirage-ionic-example/master/screens/android.gif)
 
-## Build
+## Use mirage in your npm project
+
+> npm install --save https://github.com/lp1dev/Mirage.git
+
+## Build the engine from its sources
 
 To install the needed dependencies :
 
