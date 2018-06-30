@@ -16,6 +16,7 @@ describe('Questions Builder', function () {
         expect(question.text).toBe(texts_1.textData['T_GAME_INTRO']['EN_en']);
     });
     it('should not build the answers in the "hide" section of the question', function () {
+        var state = { 'coins': 4 };
         var unparsedQuestion = {
             id: 'TEST_QUESTION',
             text: 'T_TEST_QUESTION',
@@ -26,10 +27,9 @@ describe('Questions Builder', function () {
             },
             hide: {
                 'TEST_ANSWER2': 'coins < 3',
-                'TEST_ANSWER3': 'coins == 4'
+                'TEST_ANSWER3': 'coins < 5'
             }
         };
-        var state = { 'coins': 4 };
         var builder = new class_1.default(textLoader);
         var question = builder.build(unparsedQuestion, state);
         expect(question.answers['TEST_ANSWER3']).toBeUndefined();

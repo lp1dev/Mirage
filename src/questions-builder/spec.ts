@@ -18,6 +18,7 @@ describe('Questions Builder', () => {
   });
   //
   it('should not build the answers in the "hide" section of the question', () => {
+    const state = { 'coins': 4 };    
     const unparsedQuestion = {
       id: 'TEST_QUESTION',
       text: 'T_TEST_QUESTION',
@@ -28,10 +29,9 @@ describe('Questions Builder', () => {
       },
       hide: {
         'TEST_ANSWER2': 'coins < 3',
-        'TEST_ANSWER3': 'coins == 4'
+        'TEST_ANSWER3': 'coins < 5'
       }
     };
-    const state = { 'coins': 4 };
     const builder = new QuestionsBuilder(textLoader);
     const question = builder.build(unparsedQuestion, state);
     expect(question.answers['TEST_ANSWER3']).toBeUndefined();

@@ -19,7 +19,7 @@ var QuestionsBuilder = (function () {
         for (var answer in question.answers) {
             if (!question.hide ||
                 !question.hide[answer] ||
-                module_1.default.evaluate(question.hide[answer], state) === false) {
+                module_1.default.evaluate(question.hide[answer], state) !== true) {
                 builtQuestion.answers[this.textLoader.get(answer)] = question.answers[answer];
             }
         }

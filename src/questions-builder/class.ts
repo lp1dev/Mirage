@@ -18,11 +18,11 @@ class QuestionsBuilder {
       id: question.id,
       text: this.textLoader.get(question.text),
       answers: {}
-    }
+    };
     for (let answer in question.answers) {
       if (!question.hide ||
           !question.hide[answer] ||
-          StateMachine.evaluate(question.hide[answer], state) === false) {
+          StateMachine.evaluate(question.hide[answer], state) !== true) {
             builtQuestion.answers[this.textLoader.get(answer)] = question.answers[answer];
       }
     }
