@@ -1,6 +1,11 @@
 interface Question {
-    id?: any;
+    id: any;
     text: string;
-    answers?: any;
+    answers?: {
+        [key: string]: string;
+    };
+    hide?: {
+        [key: string]: string;
+    };
 }
 export { Question };

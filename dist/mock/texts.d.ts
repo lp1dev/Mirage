@@ -1,37 +1,37 @@
 declare const textData: {
-    'GAME_INTRO': {
+    'T_GAME_INTRO': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'GAME_INTRO1': {
+    'T_GAME_INTRO1': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'GAME_INTRO2': {
+    'T_GAME_INTRO2': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'GAME_INTRO3': {
+    'T_GAME_INTRO3': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'GAME_INTRO4': {
+    'T_GAME_INTRO4': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'CHAPTER1': {
+    'T_CHAPTER1': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'CHAPTER1_1': {
+    'T_CHAPTER1_1': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'CHAPTER1_2': {
+    'T_CHAPTER1_2': {
         'FR_fr': string;
         'EN_en': string;
     };
-    'CHAPTER1_3': {
+    'T_CHAPTER1_3': {
         'FR_fr': string;
         'EN_en': string;
     };

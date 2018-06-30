@@ -28,16 +28,16 @@ var Game = (function () {
     };
     Game.prototype.display = function () {
         if (!this.state['question']) {
-            throw new exceptions_1.InvalidStateException(JSON.stringify(this.state));
+            throw new exceptions_1.InvalidStateException('no question selected ' + JSON.stringify(this.state));
         }
-        else {
+        else if (!this.state['answers']) {
             return this.question(this.state['question']);
         }
     };
     Game.prototype.question = function (id) {
         if (typeof (id) == 'number') {
             if (id >= 0 && id < this.gameData.questions.length) {
-                return this.questionsBuilder.build(this.gameData.questions[id]);
+                return this.questionsBuilder.build(this.gameData.questions[id], this.state);
             }
             else {
                 throw new exceptions_1.InvalidQuestionIdException(id);
@@ -51,7 +51,7 @@ var Game = (function () {
                 throw new exceptions_1.InvalidQuestionIdException(id);
             }
             else {
-                return this.questionsBuilder.build(results[0]);
+                return this.questionsBuilder.build(results[0], this.state);
             }
         }
     };

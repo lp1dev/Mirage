@@ -38,60 +38,6 @@ function roll(params, state) {
     var value = Math.ceil(Math.random() * dice);
     set([params[0], value], state);
 }
-function evaluate(expressionString, state) {
-    var conditionals = [];
-    var expressions = [[]];
-    var results = [];
-    expressionString.trim().split(' ').forEach(function (term) {
-        if (term == 'and' || term == 'or') {
-            expressions.push([]);
-            conditionals.push(term);
-        }
-        else {
-            expressions[expressions.length - 1].push(term);
-        }
-    });
-    expressions.forEach(function (expression) {
-        var leftValue = null;
-        var rightValue = null;
-        var operand = null;
-        expression.forEach(function (term) {
-            if (knownOperands.indexOf(term) !== -1) {
-                if (!leftValue) {
-                    throw new exceptions_1.InvalidInstructionFormatException(expression.join(' '));
-                }
-                operand = term;
-            }
-            else {
-                var value = state[term] ? state[term] : term;
-                if (!leftValue) {
-                    leftValue = value;
-                }
-                else if (!rightValue) {
-                    rightValue = value;
-                }
-                else {
-                    throw new exceptions_1.InvalidInstructionFormatException(expression.join(' '));
-                }
-            }
-        });
-        results.push(operands[operand](leftValue, rightValue));
-    });
-    if (conditionals.length) {
-        conditionals.forEach(function (conditional, index) {
-            if (index + 1 > results.length) {
-                throw new exceptions_1.InvalidInstructionFormatException(expressionString);
-            }
-            if (conditional == 'and') {
-                results.push(results[index] && results[index + 1]);
-            }
-            else if (conditional == 'or') {
-                results.push(results[index] || results[index + 1]);
-            }
-        });
-    }
-    return results.pop();
-}
 function ifInstruction(params, state) {
     var thenPosition = params.indexOf('then');
     var elsePosition = params.indexOf('else');
@@ -100,7 +46,7 @@ function ifInstruction(params, state) {
     }
     else {
         var ifExpression = params.slice(0, thenPosition);
-        var result = evaluate(ifExpression.join(' '), state);
+        var result = StateMachine.evaluate(ifExpression.join(' '), state);
         if (result === true) {
             var thenExpression = (elsePosition !== -1) ? params.slice(thenPosition + 1, elsePosition) : params.slice(thenPosition + 1);
             StateMachine.process(thenExpression.join(' '), state);
@@ -175,6 +121,61 @@ var StateMachine;
         return state;
     }
     StateMachine.process = process;
+    function evaluate(expressionString, state) {
+        var conditionals = [];
+        var expressions = [[]];
+        var results = [];
+        expressionString.trim().split(' ').forEach(function (term) {
+            if (term == 'and' || term == 'or') {
+                expressions.push([]);
+                conditionals.push(term);
+            }
+            else {
+                expressions[expressions.length - 1].push(term);
+            }
+        });
+        expressions.forEach(function (expression) {
+            var leftValue = null;
+            var rightValue = null;
+            var operand = null;
+            expression.forEach(function (term) {
+                if (knownOperands.indexOf(term) !== -1) {
+                    if (!leftValue) {
+                        throw new exceptions_1.InvalidInstructionFormatException(expression.join(' '));
+                    }
+                    operand = term;
+                }
+                else {
+                    var value = state[term] ? state[term] : term;
+                    if (!leftValue) {
+                        leftValue = value;
+                    }
+                    else if (!rightValue) {
+                        rightValue = value;
+                    }
+                    else {
+                        throw new exceptions_1.InvalidInstructionFormatException(expression.join(' '));
+                    }
+                }
+            });
+            results.push(operands[operand](leftValue, rightValue));
+        });
+        if (conditionals.length) {
+            conditionals.forEach(function (conditional, index) {
+                if (index + 1 > results.length) {
+                    throw new exceptions_1.InvalidInstructionFormatException(expressionString);
+                }
+                if (conditional == 'and') {
+                    results.push(results[index] && results[index + 1]);
+                }
+                else if (conditional == 'or') {
+                    results.push(results[index] || results[index + 1]);
+                }
+            });
+        }
+        return results.pop();
+    }
+    StateMachine.evaluate = evaluate;
 })(StateMachine || (StateMachine = {}));
 exports.default = StateMachine;
 //# sourceMappingURL=module.js.map

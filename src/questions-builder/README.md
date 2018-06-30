@@ -23,7 +23,11 @@ class QuestionsBuilder {
 const question = {
   test: "GAME_INTRO",
   answers: {
-    "ANSWER1_TEXT": "GOTO GAME1"
+    "ANSWER1_TEXT": "GOTO GAME1",
+    "ANSWER2_TEXT: "GOTO GAME2"
+  },
+  hide: {
+    "ANSWER2_TEST": "if coins < 5"
   }
 };
 const builder = new QuestionsBuilder(textLoader);
@@ -36,6 +40,7 @@ const builtQuestion = builder.build(question);
 interface Question {
   id?: any;
   text: string;
-  answers?: any;
+  answers?: {[key: string]: string};
+  hide?: {[key: string]: string}
 }
 ```

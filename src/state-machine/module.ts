@@ -1,4 +1,4 @@
-import { State, Instruction } from './interfaces';
+import { State } from './interfaces';
 import { InvalidInstructionFormatException, InvalidInstructionTypeException, UndefinedValueException } from '../game/exceptions';
 
 // Instructions
@@ -46,58 +46,6 @@ function roll(params: Array<string>, state: State) {
   set([params[0], value], state);
 }
 
-function evaluate(expressionString: string, state: State) {
-  let conditionals = [];
-  let expressions = [[]];
-  let results = [];
-
-  expressionString.trim().split(' ').forEach(term => {
-    if (term == 'and' || term == 'or') {
-      expressions.push([]);
-      conditionals.push(term);
-    } else {
-      expressions[expressions.length - 1].push(term);
-    }
-  });
-  expressions.forEach(expression => {
-    let leftValue = null;
-    let rightValue = null;
-    let operand = null;
-
-    expression.forEach(term => {
-      if (knownOperands.indexOf(term) !== -1) {
-        if (!leftValue) {
-          throw new InvalidInstructionFormatException(expression.join(' '));
-        }
-        operand = term;
-      } else {
-        const value = state[term] ? state[term] : term;
-        if (!leftValue) {
-          leftValue = value;
-        } else if (!rightValue) {
-          rightValue = value;
-        } else {
-          throw new InvalidInstructionFormatException(expression.join(' '));
-        }
-      }
-    });
-    results.push(operands[operand](leftValue, rightValue));
-  });
-  if (conditionals.length) {
-    conditionals.forEach((conditional, index) => {
-      if (index + 1 > results.length) {
-        throw new InvalidInstructionFormatException(expressionString);
-      }
-      if (conditional == 'and') {
-        results.push(results[index] && results[index + 1]);
-      } else if (conditional == 'or') {
-        results.push(results[index] || results[index + 1]);
-      }
-    });
-  }
-  return results.pop();
-}
-
 function ifInstruction(params: Array<string>, state: State) {
   const thenPosition = params.indexOf('then');
   const elsePosition = params.indexOf('else');
@@ -105,7 +53,7 @@ function ifInstruction(params: Array<string>, state: State) {
     throw new InvalidInstructionFormatException('if expression should contain an else statement');
   } else {
     const ifExpression = params.slice(0, thenPosition);
-    const result = evaluate(ifExpression.join(' '), state);
+    const result = StateMachine.evaluate(ifExpression.join(' '), state);
     if (result === true) {
       const thenExpression = (elsePosition !== -1) ? params.slice(thenPosition + 1, elsePosition) : params.slice(thenPosition + 1);
       StateMachine.process(thenExpression.join(' '), state);
@@ -167,7 +115,7 @@ module StateMachine {
       const splitInstruction = instruction.split(' ').filter(s => s.length);
       if (splitInstruction.length < 2) {
         if (instructionTypes[splitInstruction[0]]) {
-          throw new InvalidInstructionFormatException('Missing parameter(s) in '+ instructionsString);
+          throw new InvalidInstructionFormatException('Missing parameter(s) in ' + instructionsString);
         }
         goto(splitInstruction, state);
         return state;
@@ -177,6 +125,59 @@ module StateMachine {
       handleInstruction(type, params, state);
     });
     return state;
+  }
+
+
+  export function evaluate(expressionString: string, state: State) {
+    let conditionals = [];
+    let expressions = [[]];
+    let results = [];
+
+    expressionString.trim().split(' ').forEach(term => {
+      if (term == 'and' || term == 'or') {
+        expressions.push([]);
+        conditionals.push(term);
+      } else {
+        expressions[expressions.length - 1].push(term);
+      }
+    });
+    expressions.forEach(expression => {
+      let leftValue = null;
+      let rightValue = null;
+      let operand = null;
+
+      expression.forEach(term => {
+        if (knownOperands.indexOf(term) !== -1) {
+          if (!leftValue) {
+            throw new InvalidInstructionFormatException(expression.join(' '));
+          }
+          operand = term;
+        } else {
+          const value = state[term] ? state[term] : term;
+          if (!leftValue) {
+            leftValue = value;
+          } else if (!rightValue) {
+            rightValue = value;
+          } else {
+            throw new InvalidInstructionFormatException(expression.join(' '));
+          }
+        }
+      });
+      results.push(operands[operand](leftValue, rightValue));
+    });
+    if (conditionals.length) {
+      conditionals.forEach((conditional, index) => {
+        if (index + 1 > results.length) {
+          throw new InvalidInstructionFormatException(expressionString);
+        }
+        if (conditional == 'and') {
+          results.push(results[index] && results[index + 1]);
+        } else if (conditional == 'or') {
+          results.push(results[index] || results[index + 1]);
+        }
+      });
+    }
+    return results.pop();
   }
 }
 

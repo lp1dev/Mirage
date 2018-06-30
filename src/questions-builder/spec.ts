@@ -12,8 +12,29 @@ describe('Questions Builder', () => {
   //
   it('should build questions', () => {
     const builder = new QuestionsBuilder(textLoader);
-    const question = builder.build(unparsedQuestions[0]);
+    const question = builder.build(unparsedQuestions[0], {});
     expect(question).toBeDefined();
-    expect(question.text).toBe(textData['GAME_INTRO']['EN_en']);
+    expect(question.text).toBe(textData['T_GAME_INTRO']['EN_en']);
   });
+  //
+  it('should not build the answers in the "hide" section of the question', () => {
+    const unparsedQuestion = {
+      id: 'TEST_QUESTION',
+      text: 'T_TEST_QUESTION',
+      answers: {
+        'TEST_ANSWER1': 'T_TEST_ANSWER1',
+        'TEST_ANSWER2': 'T_TEST_ANSWER2',
+        'TEST_ANSWER3': 'T_TEST_ANSWER3'
+      },
+      hide: {
+        'TEST_ANSWER2': 'coins < 3',
+        'TEST_ANSWER3': 'coins == 4'
+      }
+    };
+    const state = { 'coins': 4 };
+    const builder = new QuestionsBuilder(textLoader);
+    const question = builder.build(unparsedQuestion, state);
+    expect(question.answers['TEST_ANSWER3']).toBeUndefined();
+    expect(question.answers['TEST_ANSWER2']).toBe('T_TEST_ANSWER2');
+  })
 });
