@@ -18,23 +18,26 @@ describe('Questions Builder', () => {
   });
   //
   it('should not build the answers in the "hide" section of the question', () => {
-    const state = { 'coins': 4 };    
+    const state = { 'coins': '4' };
     const unparsedQuestion = {
       id: 'TEST_QUESTION',
       text: 'T_TEST_QUESTION',
       answers: {
         'TEST_ANSWER1': 'T_TEST_ANSWER1',
         'TEST_ANSWER2': 'T_TEST_ANSWER2',
-        'TEST_ANSWER3': 'T_TEST_ANSWER3'
+        'TEST_ANSWER3': 'T_TEST_ANSWER3',
+        'TEST_ANSWER4': 'T_TEST_ANSWER4'
       },
       hide: {
         'TEST_ANSWER2': 'coins < 3',
-        'TEST_ANSWER3': 'coins < 5'
+        'TEST_ANSWER3': 'coins < 5',
+        'TEST_ANSWER4': 'coins == 4'        
       }
     };
     const builder = new QuestionsBuilder(textLoader);
     const question = builder.build(unparsedQuestion, state);
     expect(question.answers['TEST_ANSWER3']).toBeUndefined();
     expect(question.answers['TEST_ANSWER2']).toBe('T_TEST_ANSWER2');
+    expect(question.answers['TEST_ANSWER4']).toBeUndefined();
   })
 });

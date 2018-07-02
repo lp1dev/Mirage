@@ -20,10 +20,12 @@ class QuestionsBuilder {
       answers: {}
     };
     for (let answer in question.answers) {
-      if (!question.hide ||
-          !question.hide[answer] ||
-          StateMachine.evaluate(question.hide[answer], state) !== true) {
-            builtQuestion.answers[this.textLoader.get(answer)] = question.answers[answer];
+      if (question.hide && question.hide[answer]) {
+        if (StateMachine.evaluate(question.hide[answer], state) === false) {
+          builtQuestion.answers[this.textLoader.get(answer)] = question.answers[answer];
+        }
+      } else {
+        builtQuestion.answers[this.textLoader.get(answer)] = question.answers[answer];
       }
     }
     this.cache[id] = builtQuestion;
