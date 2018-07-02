@@ -24,7 +24,8 @@ function set(params: Array<any>, state: State) {
   if (params.length !== 2 || !params[1]) {
     throw new InvalidInstructionFormatException('Invalid parameters', params);
   }
-  state[params[0]] = params[1];
+  const value = isNaN(parseInt(params[1])) ? params[1] : parseInt(params[1]);
+  state[params[0]] = value;
 }
 
 function copy(params: Array<string>, state: State) {
@@ -153,7 +154,8 @@ module StateMachine {
           }
           operand = term;
         } else {
-          const value = state[term] ? state[term] : term;
+          let value = state[term] ? state[term] : term;
+          value = isNaN(parseInt(value)) ? value : parseInt(value);
           if (!leftValue) {
             leftValue = value;
           } else if (!rightValue) {

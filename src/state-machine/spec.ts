@@ -27,7 +27,7 @@ describe('State Machine', () => {
   it('Should allow to set a state variable with set', () => {
     const state = {};
     StateMachine.process('set LIFE 100', state);
-    expect(state['LIFE']).toBe('100');
+    expect(state['LIFE']).toBe(100);
   });
   //
   it('Should only take a set instruction with exactly two parameter and throw otherwise', () => {
@@ -39,7 +39,7 @@ describe('State Machine', () => {
     const state = {};
     StateMachine.process('goto GAME_INTRO; set DONE true; set TEST 1', state);
     expect(state['DONE']).toBeTruthy();
-    expect(state['TEST']).toBe('1');
+    expect(state['TEST']).toBe(1);
   });
   //
   it('Should allow to copy variables with the copy instruction', () => {
@@ -63,7 +63,7 @@ describe('State Machine', () => {
     StateMachine.process('if TEST is 42 then goto CHAPTER_1', state);
     StateMachine.process('if TEST > 50 then set VAL 50 else set VAL 0', state);
     expect(state['question']).toBe('CHAPTER_1');
-    expect(state['VAL']).toBe('0');
+    expect(state['VAL']).toBe(0);
   })
   //
   it('Should handle if else statements with and and or conditionals', () => {
@@ -92,6 +92,18 @@ describe('State Machine', () => {
     StateMachine.process('IF TEST < 43 then goto CHAPTER2', state);
     expect(state['question']).toBe('CHAPTER2');
   })
+  it('should allow if on undefined variables', () => {
+    const state = {};
+    StateMachine.process('if test < 2 then goto noop else goto ok', state);
+    expect(state['question']).toBe('ok');
+  });
+  //
+  it('Should parse numbers as numbers if possible', () => {
+    const state = {};
+    StateMachine.process('set test 05 ', state);
+    StateMachine.process('add test 01', state);
+    expect(state['test']).toBe(6);
+  });
   //
   it('Should handle if else if statements', () => {
     const state = {

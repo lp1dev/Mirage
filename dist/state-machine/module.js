@@ -19,7 +19,8 @@ function set(params, state) {
     if (params.length !== 2 || !params[1]) {
         throw new exceptions_1.InvalidInstructionFormatException('Invalid parameters', params);
     }
-    state[params[0]] = params[1];
+    var value = isNaN(parseInt(params[1])) ? params[1] : parseInt(params[1]);
+    state[params[0]] = value;
 }
 function copy(params, state) {
     if (params.length !== 2 || !params[1]) {
@@ -147,6 +148,7 @@ var StateMachine;
                 }
                 else {
                     var value = state[term] ? state[term] : term;
+                    value = isNaN(parseInt(value)) ? value : parseInt(value);
                     if (!leftValue) {
                         leftValue = value;
                     }
