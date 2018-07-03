@@ -17,6 +17,9 @@ const operands = {
 };
 
 function goto(params: Array<string>, state: State) {
+  if (!/^("|')(\w+)('|")/g.test(params[0])) {
+    params[0] = `"${params[0]}"`;
+  }
   set(['question', params[0]], state);
 }
 
@@ -24,7 +27,7 @@ function set(params: Array<any>, state: State) {
   if (params.length !== 2 || !params[1]) {
     throw new InvalidInstructionFormatException('Invalid parameters', params);
   }
-  const value = isNaN(parseInt(params[1])) ? params[1] : parseInt(params[1]);
+  const value = StateMachine.bind(params[1], state);
   state[params[0]] = value;
 }
 
@@ -69,8 +72,8 @@ function calc(type: string, params: Array<string>, state: State) {
   if (params.length !== 2) {
     throw new InvalidInstructionFormatException([type, ...params].join(' '));
   }
-  let a = isNaN(parseInt(params[0])) ? state[params[0]] : parseInt(params[0]);
-  const b = isNaN(parseInt(params[1])) ? state[params[1]] : parseInt(params[1]);
+  let a = isNaN(parseInt(params[0])) ? state[params[0]] || 0 : parseInt(params[0]);
+  const b = isNaN(parseInt(params[1])) ? state[params[1]] || 0 : parseInt(params[1]);
   if (!b) {
     throw new UndefinedValueException(a ? a : b);
   } else if (!a) {
@@ -129,7 +132,29 @@ module StateMachine {
   }
 
 
-  export function evaluate(expressionString: string, state: State) {
+  export function bind(value, state) {
+    if (state[value] !== undefined) {
+      value = state[value]
+    } else if (/^("|')(\w+)('|")/g.test(value)) {
+      value = value.replace(/("|')/g, '');
+    } else if (['true', 'false'].indexOf(value) !== -1) {
+      value = value === "false" ? false : value;
+      value = value === "false" ? false : value;
+    } else if (!isNaN(value)) {
+      value = parseInt(value);
+    } else {
+      throw new UndefinedValueException(value);
+    }
+    return value;
+  }
+
+  function compare(operand: string, leftTerm, rightTerm, state): boolean {
+    leftTerm = StateMachine.bind(leftTerm, state);
+    rightTerm = StateMachine.bind(rightTerm, state);
+    return operands[operand](leftTerm, rightTerm);
+  }
+
+  export function evaluate(expressionString: string, state: State): boolean {
     let conditionals = [];
     let expressions = [[]];
     let results = [];
@@ -154,18 +179,16 @@ module StateMachine {
           }
           operand = term;
         } else {
-          let value = state[term] ? state[term] : term;
-          value = isNaN(parseInt(value)) ? value : parseInt(value);
           if (!leftValue) {
-            leftValue = value;
+            leftValue = term;
           } else if (!rightValue) {
-            rightValue = value;
+            rightValue = term;
           } else {
             throw new InvalidInstructionFormatException(expression.join(' '));
           }
         }
       });
-      results.push(operands[operand](leftValue, rightValue));
+      results.push(compare(operand, leftValue, rightValue, state));
     });
     if (conditionals.length) {
       conditionals.forEach((conditional, index) => {

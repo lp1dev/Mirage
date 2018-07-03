@@ -1,1 +1,1 @@
-{"version":3,"file":"game.js","sourceRoot":"","sources":["../../src/mock/game.ts"],"names":[],"mappings":";;AACA,yCAAgD;AAEhD,IAAM,QAAQ,GAAa;IACzB,IAAI,EAAE,UAAU;IAChB,KAAK,EAAE,SAAS;IAChB,SAAS,EAAE,6BAAiB;IAC5B,gBAAgB,EAAE,iBAAiB;CACpC,CAAC;AAEF,kBAAe,QAAQ,CAAC"}
+{"version":3,"file":"game.js","sourceRoot":"","sources":["../../src/mock/game.ts"],"names":[],"mappings":";;AACA,yCAAgD;AAEhD,IAAM,QAAQ,GAAa;IACzB,IAAI,EAAE,UAAU;IAChB,KAAK,EAAE,SAAS;IAChB,SAAS,EAAE,6BAAiB;IAC5B,gBAAgB,EAAE,mBAAmB;CACtC,CAAC;AAEF,kBAAe,QAAQ,CAAC"}

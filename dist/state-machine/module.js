@@ -13,13 +13,16 @@ var operands = {
     '<=': function (a, b) { return a <= b; }
 };
 function goto(params, state) {
+    if (!/^("|')(\w+)('|")/g.test(params[0])) {
+        params[0] = "\"" + params[0] + "\"";
+    }
     set(['question', params[0]], state);
 }
 function set(params, state) {
     if (params.length !== 2 || !params[1]) {
         throw new exceptions_1.InvalidInstructionFormatException('Invalid parameters', params);
     }
-    var value = isNaN(parseInt(params[1])) ? params[1] : parseInt(params[1]);
+    var value = StateMachine.bind(params[1], state);
     state[params[0]] = value;
 }
 function copy(params, state) {
@@ -62,8 +65,8 @@ function calc(type, params, state) {
     if (params.length !== 2) {
         throw new exceptions_1.InvalidInstructionFormatException([type].concat(params).join(' '));
     }
-    var a = isNaN(parseInt(params[0])) ? state[params[0]] : parseInt(params[0]);
-    var b = isNaN(parseInt(params[1])) ? state[params[1]] : parseInt(params[1]);
+    var a = isNaN(parseInt(params[0])) ? state[params[0]] || 0 : parseInt(params[0]);
+    var b = isNaN(parseInt(params[1])) ? state[params[1]] || 0 : parseInt(params[1]);
     if (!b) {
         throw new exceptions_1.UndefinedValueException(a ? a : b);
     }
@@ -122,6 +125,31 @@ var StateMachine;
         return state;
     }
     StateMachine.process = process;
+    function bind(value, state) {
+        if (state[value] !== undefined) {
+            value = state[value];
+        }
+        else if (/^("|')(\w+)('|")/g.test(value)) {
+            value = value.replace(/("|')/g, '');
+        }
+        else if (['true', 'false'].indexOf(value) !== -1) {
+            value = value === "false" ? false : value;
+            value = value === "false" ? false : value;
+        }
+        else if (!isNaN(value)) {
+            value = parseInt(value);
+        }
+        else {
+            throw new exceptions_1.UndefinedValueException(value);
+        }
+        return value;
+    }
+    StateMachine.bind = bind;
+    function compare(operand, leftTerm, rightTerm, state) {
+        leftTerm = StateMachine.bind(leftTerm, state);
+        rightTerm = StateMachine.bind(rightTerm, state);
+        return operands[operand](leftTerm, rightTerm);
+    }
     function evaluate(expressionString, state) {
         var conditionals = [];
         var expressions = [[]];
@@ -147,20 +175,18 @@ var StateMachine;
                     operand = term;
                 }
                 else {
-                    var value = state[term] ? state[term] : term;
-                    value = isNaN(parseInt(value)) ? value : parseInt(value);
                     if (!leftValue) {
-                        leftValue = value;
+                        leftValue = term;
                     }
                     else if (!rightValue) {
-                        rightValue = value;
+                        rightValue = term;
                     }
                     else {
                         throw new exceptions_1.InvalidInstructionFormatException(expression.join(' '));
                     }
                 }
             });
-            results.push(operands[operand](leftValue, rightValue));
+            results.push(compare(operand, leftValue, rightValue, state));
         });
         if (conditionals.length) {
             conditionals.forEach(function (conditional, index) {

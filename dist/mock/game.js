@@ -5,7 +5,7 @@ var mockData = {
     name: 'TestGame',
     theme: 'default',
     questions: questions_1.unparsedQuestions,
-    startInstruction: 'GOTO GAME_INTRO'
+    startInstruction: 'goto "GAME_INTRO"'
 };
 exports.default = mockData;
 //# sourceMappingURL=game.js.map

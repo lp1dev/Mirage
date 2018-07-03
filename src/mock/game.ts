@@ -5,7 +5,7 @@ const mockData: GameData = {
   name: 'TestGame',
   theme: 'default',
   questions: unparsedQuestions,
-  startInstruction: 'GOTO GAME_INTRO'
+  startInstruction: 'goto "GAME_INTRO"'
 };
 
 export default mockData;

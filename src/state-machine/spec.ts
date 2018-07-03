@@ -4,19 +4,19 @@ import { InvalidInstructionFormatException } from '../game/exceptions';
 describe('State Machine', () => {
   it('Should allow to set the question state with goto', () => {
     const state = {};
-    StateMachine.process('goto GAME_INTRO', state);
+    StateMachine.process('goto "GAME_INTRO"', state);
     expect(state['question']).toBe('GAME_INTRO');
   });
   //
   it('Should allow to set the question state with goto', () => {
     const state = {};
-    StateMachine.process('goto GAME_INTRO', state);
+    StateMachine.process('goto "GAME_INTRO"', state);
     expect(state['question']).toBe('GAME_INTRO');
   });
   //
   it('Should allow to set the question state without an implicit goto', () => {
     const state = {};
-    StateMachine.process('GAME_INTRO', state);
+    StateMachine.process('goto "GAME_INTRO"', state);
     expect(state['question']).toBe('GAME_INTRO');
   });
   //
@@ -26,8 +26,10 @@ describe('State Machine', () => {
   //
   it('Should allow to set a state variable with set', () => {
     const state = {};
-    StateMachine.process('set LIFE 100', state);
-    expect(state['LIFE']).toBe(100);
+    StateMachine.process('set life 100', state);
+    StateMachine.process('set test "testString"', state);
+    expect(state['life']).toBe(100);
+    expect(state['test']).toBe('testString');
   });
   //
   it('Should only take a set instruction with exactly two parameter and throw otherwise', () => {
@@ -37,7 +39,7 @@ describe('State Machine', () => {
   //
   it('Should accept multiple inlined instructions', () => {
     const state = {};
-    StateMachine.process('goto GAME_INTRO; set DONE true; set TEST 1', state);
+    StateMachine.process('goto "GAME_INTRO"; set DONE true; set TEST 1', state);
     expect(state['DONE']).toBeTruthy();
     expect(state['TEST']).toBe(1);
   });
@@ -69,18 +71,18 @@ describe('State Machine', () => {
   it('Should handle if else statements with and and or conditionals', () => {
     const state = {};
     StateMachine.process('set TEST 42', state);
-    StateMachine.process('set CHAPTER1 TRUE', state);
-    StateMachine.process('if TEST is 42 and CHAPTER1 == TRUE then goto CHAPTER_1', state);
+    StateMachine.process('set CHAPTER1 true', state);
+    StateMachine.process('if TEST is 42 and CHAPTER1 == true then goto CHAPTER_1', state);
     expect(state['question']).toBe('CHAPTER_1');
   });
   //
   it('Should handle if else statements with multiple "and" and "or" conditionals', () => {
     const state = {
       'TEST': 42,
-      'GAME_INTRO': 'FALSE',
-      'CHAPTER1': 'TRUE'
+      'GAME_INTRO': 'false',
+      'CHAPTER1': 'true'
     };
-    StateMachine.process('if TEST is 42 and GAME_INTRO is TRUE or CHAPTER1 is TRUE then goto PASSED', state);
+    StateMachine.process('if TEST is 42 and "GAME_INTRO" is true or CHAPTER1 is true then goto PASSED', state);
     expect(state['question']).toBe('PASSED');
   });
   it('Should handle >= > < <= conditionals', () => {
@@ -92,10 +94,9 @@ describe('State Machine', () => {
     StateMachine.process('IF TEST < 43 then goto CHAPTER2', state);
     expect(state['question']).toBe('CHAPTER2');
   })
-  it('should allow if on undefined variables', () => {
+  it('should throw if an undefined variable is being evaluated', () => {
     const state = {};
-    StateMachine.process('if test < 2 then goto noop else goto ok', state);
-    expect(state['question']).toBe('ok');
+    expect(() => { StateMachine.process('if test < 2 then goto noop else goto ok', state) }).toThrow();
   });
   //
   it('Should parse numbers as numbers if possible', () => {
@@ -108,10 +109,10 @@ describe('State Machine', () => {
   it('Should handle if else if statements', () => {
     const state = {
       'TEST': 42,
-      'GAME_INTRO': 'FALSE',
-      'CHAPTER1': 'TRUE'
+      'GAME_INTRO': false,
+      'CHAPTER1': true
     };
-    StateMachine.process('if TEST is 0 then set DONE 0 else if GAME_INTRO is FALSE then goto PASSED', state);
+    StateMachine.process('if TEST is 0 then set DONE 0 else if GAME_INTRO is false then goto "PASSED"', state);
     expect(state['question']).toBe('PASSED');
   });
   //

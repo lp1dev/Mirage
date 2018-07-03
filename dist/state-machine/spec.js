@@ -4,17 +4,17 @@ var module_1 = require("./module");
 describe('State Machine', function () {
     it('Should allow to set the question state with goto', function () {
         var state = {};
-        module_1.default.process('goto GAME_INTRO', state);
+        module_1.default.process('goto "GAME_INTRO"', state);
         expect(state['question']).toBe('GAME_INTRO');
     });
     it('Should allow to set the question state with goto', function () {
         var state = {};
-        module_1.default.process('goto GAME_INTRO', state);
+        module_1.default.process('goto "GAME_INTRO"', state);
         expect(state['question']).toBe('GAME_INTRO');
     });
     it('Should allow to set the question state without an implicit goto', function () {
         var state = {};
-        module_1.default.process('GAME_INTRO', state);
+        module_1.default.process('goto "GAME_INTRO"', state);
         expect(state['question']).toBe('GAME_INTRO');
     });
     it('Should only take a goto with a parameter and throw otherwise', function () {
@@ -22,8 +22,10 @@ describe('State Machine', function () {
     });
     it('Should allow to set a state variable with set', function () {
         var state = {};
-        module_1.default.process('set LIFE 100', state);
-        expect(state['LIFE']).toBe(100);
+        module_1.default.process('set life 100', state);
+        module_1.default.process('set test "testString"', state);
+        expect(state['life']).toBe(100);
+        expect(state['test']).toBe('testString');
     });
     it('Should only take a set instruction with exactly two parameter and throw otherwise', function () {
         expect(function () { return module_1.default.process('set', {}); }).toThrow();
@@ -31,7 +33,7 @@ describe('State Machine', function () {
     });
     it('Should accept multiple inlined instructions', function () {
         var state = {};
-        module_1.default.process('goto GAME_INTRO; set DONE true; set TEST 1', state);
+        module_1.default.process('goto "GAME_INTRO"; set DONE true; set TEST 1', state);
         expect(state['DONE']).toBeTruthy();
         expect(state['TEST']).toBe(1);
     });
@@ -59,17 +61,17 @@ describe('State Machine', function () {
     it('Should handle if else statements with and and or conditionals', function () {
         var state = {};
         module_1.default.process('set TEST 42', state);
-        module_1.default.process('set CHAPTER1 TRUE', state);
-        module_1.default.process('if TEST is 42 and CHAPTER1 == TRUE then goto CHAPTER_1', state);
+        module_1.default.process('set CHAPTER1 true', state);
+        module_1.default.process('if TEST is 42 and CHAPTER1 == true then goto CHAPTER_1', state);
         expect(state['question']).toBe('CHAPTER_1');
     });
     it('Should handle if else statements with multiple "and" and "or" conditionals', function () {
         var state = {
             'TEST': 42,
-            'GAME_INTRO': 'FALSE',
-            'CHAPTER1': 'TRUE'
+            'GAME_INTRO': 'false',
+            'CHAPTER1': 'true'
         };
-        module_1.default.process('if TEST is 42 and GAME_INTRO is TRUE or CHAPTER1 is TRUE then goto PASSED', state);
+        module_1.default.process('if TEST is 42 and "GAME_INTRO" is true or CHAPTER1 is true then goto PASSED', state);
         expect(state['question']).toBe('PASSED');
     });
     it('Should handle >= > < <= conditionals', function () {
@@ -81,10 +83,9 @@ describe('State Machine', function () {
         module_1.default.process('IF TEST < 43 then goto CHAPTER2', state);
         expect(state['question']).toBe('CHAPTER2');
     });
-    it('should allow if on undefined variables', function () {
+    it('should throw if an undefined variable is being evaluated', function () {
         var state = {};
-        module_1.default.process('if test < 2 then goto noop else goto ok', state);
-        expect(state['question']).toBe('ok');
+        expect(function () { module_1.default.process('if test < 2 then goto noop else goto ok', state); }).toThrow();
     });
     it('Should parse numbers as numbers if possible', function () {
         var state = {};
@@ -95,10 +96,10 @@ describe('State Machine', function () {
     it('Should handle if else if statements', function () {
         var state = {
             'TEST': 42,
-            'GAME_INTRO': 'FALSE',
-            'CHAPTER1': 'TRUE'
+            'GAME_INTRO': false,
+            'CHAPTER1': true
         };
-        module_1.default.process('if TEST is 0 then set DONE 0 else if GAME_INTRO is FALSE then goto PASSED', state);
+        module_1.default.process('if TEST is 0 then set DONE 0 else if GAME_INTRO is false then goto "PASSED"', state);
         expect(state['question']).toBe('PASSED');
     });
     it('Should add numbers with add', function () {
