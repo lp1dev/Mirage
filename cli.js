@@ -53,7 +53,6 @@
             questionBuffer['answers'] = {};
           }
 	  const action = trimmedLine.match(/`.*`/i)[0].replace(/`/g, '').trim()
-	  console.log(action)
 	  trimmedLine = trimmedLine.replace(`\`${action}\``, '')
 	  const conditions = trimmedLine.match(/\[(.*)\]/g)
 	  if (conditions) {
