@@ -17,8 +17,8 @@ describe('Questions Builder', () => {
     expect(question.text).toBe(textData['T_GAME_INTRO']['EN_en']);
   });
   //
-  it('should not build the answers in the "hide" section of the question', () => {
-    const state = { 'coins': '4' };
+  it('should build the answers in the "conditions" section of the question only if valid', () => {
+    const state = { 'coins': 4 };
     const unparsedQuestion = {
       id: 'TEST_QUESTION',
       text: 'T_TEST_QUESTION',
@@ -28,10 +28,10 @@ describe('Questions Builder', () => {
         'TEST_ANSWER3': 'T_TEST_ANSWER3',
         'TEST_ANSWER4': 'T_TEST_ANSWER4'
       },
-      hide: {
-        'TEST_ANSWER2': 'coins < 3',
-        'TEST_ANSWER3': 'coins < 5',
-        'TEST_ANSWER4': 'coins == 4'        
+      conditions: {
+        'TEST_ANSWER2': 'coins >= 3',
+        'TEST_ANSWER3': 'coins >= 5',
+        'TEST_ANSWER4': 'coins != 4'
       }
     };
     const builder = new QuestionsBuilder(textLoader);

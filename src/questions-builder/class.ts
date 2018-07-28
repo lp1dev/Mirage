@@ -20,8 +20,8 @@ class QuestionsBuilder {
       answers: {}
     };
     for (let answer in question.answers) {
-      if (question.condition && question.condition[answer]) {
-        if (StateMachine.evaluate(question.condition[answer], state) !== false) {
+      if (question.conditions && question.conditions[answer]) {
+        if (StateMachine.evaluate(question.conditions[answer], state) === true) {
           builtQuestion.answers[this.textLoader.get(answer)] = question.answers[answer];
         }
       } else {

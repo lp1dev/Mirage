@@ -15,8 +15,8 @@ describe('Questions Builder', function () {
         expect(question).toBeDefined();
         expect(question.text).toBe(texts_1.textData['T_GAME_INTRO']['EN_en']);
     });
-    it('should not build the answers in the "hide" section of the question', function () {
-        var state = { 'coins': '4' };
+    it('should build the answers in the "conditions" section of the question only if valid', function () {
+        var state = { 'coins': 4 };
         var unparsedQuestion = {
             id: 'TEST_QUESTION',
             text: 'T_TEST_QUESTION',
@@ -26,10 +26,10 @@ describe('Questions Builder', function () {
                 'TEST_ANSWER3': 'T_TEST_ANSWER3',
                 'TEST_ANSWER4': 'T_TEST_ANSWER4'
             },
-            hide: {
-                'TEST_ANSWER2': 'coins < 3',
-                'TEST_ANSWER3': 'coins < 5',
-                'TEST_ANSWER4': 'coins == 4'
+            conditions: {
+                'TEST_ANSWER2': 'coins >= 3',
+                'TEST_ANSWER3': 'coins >= 5',
+                'TEST_ANSWER4': 'coins != 4'
             }
         };
         var builder = new class_1.default(textLoader);

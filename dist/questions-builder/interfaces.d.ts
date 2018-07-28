@@ -4,7 +4,7 @@ interface Question {
     answers?: {
         [key: string]: string;
     };
-    hide?: {
+    conditions?: {
         [key: string]: string;
     };
 }

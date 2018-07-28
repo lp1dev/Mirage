@@ -17,8 +17,11 @@ var QuestionsBuilder = (function () {
             answers: {}
         };
         for (var answer in question.answers) {
-            if (question.hide && question.hide[answer]) {
-                if (module_1.default.evaluate(question.hide[answer], state) === false) {
+            if (question.conditions && question.conditions[answer]) {
+                if (module_1.default.evaluate(question.conditions[answer], state) === true) {
+                    console.log(state);
+                    console.log(question.conditions[answer]);
+                    console.log(module_1.default.evaluate(question.conditions[answer], state));
                     builtQuestion.answers[this.textLoader.get(answer)] = question.answers[answer];
                 }
             }
