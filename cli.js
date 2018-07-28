@@ -30,7 +30,7 @@
       if (!['##', '#', '`', ' ', '-'].includes(lineBeginning)) {
         lineBeginning = line[0];
       }
-      const trimmedLine = line.replace(lineBeginning, '').trim();
+      let trimmedLine = line.replace(lineBeginning, '').trim();
       switch(lineBeginning) {
         case '#':
           game['name'] = trimmedLine;
@@ -52,11 +52,22 @@
           if (!questionBuffer['answers']) {
             questionBuffer['answers'] = {};
           }
-          const splitQuestion = trimmedLine.split('`');
-          questionBuffer['answers'][splitQuestion[0].trim()] = 
-            splitQuestion[1].replace('`', '');
+	  const action = trimmedLine.match(/`.*`/i)[0].replace(/`/g, '').trim()
+	  console.log(action)
+	  trimmedLine = trimmedLine.replace(`\`${action}\``, '')
+	  const conditions = trimmedLine.match(/\[(.*)\]/g)
+	  if (conditions) {
+	      conditions.forEach((condition) => {
+		  trimmedLine = trimmedLine.replace(condition, '');
+		  if (!questionBuffer['conditions']) {
+		      questionBuffer['conditions'] = {};
+		  }
+		  questionBuffer['conditions'][trimmedLine] = condition.replace(/(\[|\])/g, '')
+	      })
+	  }
+          questionBuffer['answers'][trimmedLine] = action
           break;
-        case '`':
+	 case '`':
           game['startInstruction'] = trimmedLine.replace('`', '');
           break;
       }
