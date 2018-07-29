@@ -52,6 +52,11 @@
           if (!questionBuffer['answers']) {
             questionBuffer['answers'] = {};
           }
+        case undefined:
+          if (questionBuffer && questionBuffer['text']) {
+              questionBuffer['text'] += '\n'
+          }
+          break;
 	  const action = trimmedLine.match(/`.*`/i)[0].replace(/`/g, '').trim()
 	  trimmedLine = trimmedLine.replace(`\`${action}\``, '')
 	  const conditions = trimmedLine.match(/\[(.*)\]/g)
