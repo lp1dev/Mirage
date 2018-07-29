@@ -52,27 +52,27 @@
           if (!questionBuffer['answers']) {
             questionBuffer['answers'] = {};
           }
+	      const action = trimmedLine.match(/`.*`/i)[0].replace(/`/g, '').trim()
+	      trimmedLine = trimmedLine.replace(`\`${action}\``, '')
+	      const conditions = trimmedLine.match(/\[(.*)\]/g)
+	      if (conditions) {
+	          conditions.forEach((condition) => {
+		          trimmedLine = trimmedLine.replace(condition, '');
+		          if (!questionBuffer['conditions']) {
+		              questionBuffer['conditions'] = {};
+		          }
+		          questionBuffer['conditions'][trimmedLine] = condition.replace(/(\[|\])/g, '')
+	          })
+	      }
+          questionBuffer['answers'][trimmedLine] = action
+          break;
+        case '`':
+          game['startInstruction'] = trimmedLine.replace('`', '');
+          break;
         case undefined:
           if (questionBuffer && questionBuffer['text']) {
               questionBuffer['text'] += '\n'
           }
-          break;
-	  const action = trimmedLine.match(/`.*`/i)[0].replace(/`/g, '').trim()
-	  trimmedLine = trimmedLine.replace(`\`${action}\``, '')
-	  const conditions = trimmedLine.match(/\[(.*)\]/g)
-	  if (conditions) {
-	      conditions.forEach((condition) => {
-		  trimmedLine = trimmedLine.replace(condition, '');
-		  if (!questionBuffer['conditions']) {
-		      questionBuffer['conditions'] = {};
-		  }
-		  questionBuffer['conditions'][trimmedLine] = condition.replace(/(\[|\])/g, '')
-	      })
-	  }
-          questionBuffer['answers'][trimmedLine] = action
-          break;
-	 case '`':
-          game['startInstruction'] = trimmedLine.replace('`', '');
           break;
       }
     });
