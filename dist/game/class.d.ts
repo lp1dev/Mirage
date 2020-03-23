@@ -19,5 +19,5 @@ export declare class Game {
         state: State;
         question: any;
     };
-    readonly name: string;
+    get name(): string;
 }

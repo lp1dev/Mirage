@@ -27,6 +27,12 @@ describe('State Machine', function () {
         expect(state['life']).toBe(100);
         expect(state['test']).toBe('testString');
     });
+    it('Should allow to unset a state variable with unset', function () {
+        var state = {};
+        module_1.default.process('set life 100', state);
+        module_1.default.process('unset life', state);
+        expect(state['life']).toBe(undefined);
+    });
     it('Should only take a set instruction with exactly two parameter and throw otherwise', function () {
         expect(function () { return module_1.default.process('set', {}); }).toThrow();
         expect(function () { return module_1.default.process('set TEST 42 1', {}); }).toThrow();

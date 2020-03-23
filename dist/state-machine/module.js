@@ -1,4 +1,11 @@
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var exceptions_1 = require("../game/exceptions");
 var knownOperands = ['==', 'is', 'isn\'t', '!=', '>', '<', '>=', '<='];
@@ -20,10 +27,16 @@ function goto(params, state) {
 }
 function set(params, state) {
     if (params.length !== 2 || !params[1]) {
-        throw new exceptions_1.InvalidInstructionFormatException('Invalid parameters', params);
+        throw new exceptions_1.InvalidInstructionFormatException('set:: Invalid parameters', params);
     }
     var value = StateMachine.bind(params[1], state);
     state[params[0]] = value;
+}
+function unset(params, state) {
+    if (params.length !== 1 || !params[0]) {
+        throw new exceptions_1.InvalidInstructionFormatException('unset:: Invalid parameters', params);
+    }
+    delete state[params[0]];
 }
 function copy(params, state) {
     if (params.length !== 2 || !params[1]) {
@@ -63,7 +76,7 @@ function ifInstruction(params, state) {
 }
 function calc(type, params, state) {
     if (params.length !== 2) {
-        throw new exceptions_1.InvalidInstructionFormatException([type].concat(params).join(' '));
+        throw new exceptions_1.InvalidInstructionFormatException(__spreadArrays([type], params).join(' '));
     }
     var a = isNaN(parseInt(params[0])) ? state[params[0]] || 0 : parseInt(params[0]);
     var b = isNaN(parseInt(params[1])) ? state[params[1]] || 0 : parseInt(params[1]);
@@ -90,6 +103,7 @@ var StateMachine;
     var instructionTypes = {
         'goto': goto,
         'set': set,
+        'unset': unset,
         'copy': copy,
         'roll': roll,
         'if': ifInstruction,

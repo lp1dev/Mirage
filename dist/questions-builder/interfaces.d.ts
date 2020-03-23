@@ -7,5 +7,6 @@ interface Question {
     conditions?: {
         [key: string]: string;
     };
+    expressions?: Array<string>;
 }
 export { Question };

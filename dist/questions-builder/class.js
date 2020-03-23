@@ -16,6 +16,12 @@ var QuestionsBuilder = (function () {
             text: this.textLoader.get(question.text),
             answers: {}
         };
+        if (question.expressions) {
+            for (var _i = 0, _a = question.expressions; _i < _a.length; _i++) {
+                var expression = _a[_i];
+                module_1.default.process(expression, state);
+            }
+        }
         for (var answer in question.answers) {
             if (question.conditions && question.conditions[answer]) {
                 if (module_1.default.evaluate(question.conditions[answer], state) === true) {
