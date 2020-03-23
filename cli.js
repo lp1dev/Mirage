@@ -54,6 +54,8 @@
               questionBuffer['expressions'] = [];
             }
             questionBuffer['expressions'].push(trimmedLine.replace('`', ''));
+          } else {
+            game['startInstruction'] = trimmedLine.replace('`', '');
           }
           break;
         case '-':
@@ -73,9 +75,6 @@
             })
           }
           questionBuffer['answers'][trimmedLine] = action
-          break;
-        case '`':
-          game['startInstruction'] = trimmedLine.replace('`', '');
           break;
         case undefined:
           if (questionBuffer && questionBuffer['text']) {
