@@ -4,7 +4,7 @@ interface Question {
   text: string;
   answers?: {[key: string]: string};
   conditions?: {[key: string]: string};
-  expressions: Array<string>;
+  expressions?: Array<string>;
 }
 
 export { Question }

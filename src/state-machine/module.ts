@@ -25,10 +25,17 @@ function goto(params: Array<string>, state: State) {
 
 function set(params: Array<any>, state: State) {
   if (params.length !== 2 || !params[1]) {
-    throw new InvalidInstructionFormatException('Invalid parameters', params);
+    throw new InvalidInstructionFormatException('set:: Invalid parameters', params);
   }
   const value = StateMachine.bind(params[1], state);
   state[params[0]] = value;
+}
+
+function unset(params: Array<any>, state: State) {
+  if (params.length !== 1 || !params[0]) {
+    throw new InvalidInstructionFormatException('unset:: Invalid parameters', params);
+  }
+  delete state[params[0]];
 }
 
 function copy(params: Array<string>, state: State) {
@@ -96,6 +103,7 @@ module StateMachine {
   const instructionTypes = {
     'goto': goto,
     'set': set,
+    'unset': unset,
     'copy': copy,
     'roll': roll,
     'if': ifInstruction,

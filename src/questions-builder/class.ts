@@ -19,8 +19,10 @@ class QuestionsBuilder {
       text: this.textLoader.get(question.text),
       answers: {}
     };
-    for (let expression of question.expressions) {
-      StateMachine.evaluate(expression, state);
+    if (question.expressions) {
+      for (let expression of question.expressions) {
+        StateMachine.process(expression, state);
+      }
     }
     for (let answer in question.answers) {
       if (question.conditions && question.conditions[answer]) {
